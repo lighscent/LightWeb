@@ -14,7 +14,12 @@
     "electron-builder": "^24.13.3"
   },
   "dependencies": {
-    "axios": "^1.7.2"
+    "@cliqz/adblocker-electron": "^1.27.11",
+    "@cliqz/adblocker-webextension": "^1.27.11",
+    "axios": "^1.7.2",
+    "cross-fetch": "^4.0.0",
+    "electron-devtools-installer": "^3.2.0",
+    "path": "^0.12.7"
   },
   "build": {
     "appId": "re.idk.lightweb",

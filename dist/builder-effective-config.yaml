@@ -1,0 +1,11 @@
+directories:
+  output: dist
+  buildResources: build
+appId: re.idk.lightweb
+productName: LightWeb
+copyright: © 2024 Light2k4
+win:
+  target: nsis
+  publisherName: Light2k4
+files: []
+electronVersion: 31.1.0
