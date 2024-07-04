@@ -1,7 +1,7 @@
 const { app, BrowserWindow, Menu, shell, dialog } = require('electron');
 const axios = require('axios')
 
-let window;
+let win;
 
 
 function createWindow() {
@@ -17,9 +17,19 @@ function createWindow() {
 
     win.loadURL('https://google.com')
     checkVersion();
+
+    win.on('close', () => {
+        win.webContents.session.clearCache(() => { });
+        console.log('Cache cleared')
+        win.webContents.session.clearStorageData(() => { });
+        console.log('Storage cleared');
+    })
+
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    createWindow();
+});
 
 function checkVersion() {
     const localVersion = require('./version.json').version
@@ -91,7 +101,7 @@ const RowMenu = [
         ]
     },
     {
-        label: '?', // Help
+        label: '❓', // Help
         submenu: [
             {
                 label: 'Discord',
@@ -109,5 +119,7 @@ const RowMenu = [
     }
 ];
 
-const menu = Menu.buildFromTemplate(RowMenu)
-Menu.setApplicationMenu(menu)
+app.whenReady().then(() => {
+    const menu = Menu.buildFromTemplate(RowMenu);
+    Menu.setApplicationMenu(menu);
+});
