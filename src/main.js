@@ -42,7 +42,28 @@ function checkVersion() {
 
 const RowMenu = [
     {
-        label: 'Options',
+        label: '↩️', // Back
+        click() {
+            win.webContents.goBack()
+        }
+    },
+    {
+        label: '🏠', // Home
+        click() {
+            win.loadURL('https://google.com')
+        }
+    },
+    {
+        label: '↪️', // Forward
+        click() {
+            win.webContents.goForward()
+        }
+    },
+    {
+        label: '|'
+    },
+    {
+        label: '⚙️', // Settings
         submenu: [
             {
                 label: 'Reload',
@@ -70,25 +91,7 @@ const RowMenu = [
         ]
     },
     {
-        label: 'Back',
-        click() {
-            win.webContents.goBack()
-        }
-    },
-    {
-        label: 'Home',
-        click() {
-            win.loadURL('https://google.com')
-        }
-    },
-    {
-        label: 'Forward',
-        click() {
-            win.webContents.goForward()
-        }
-    },
-    {
-        label: '?',
+        label: '?', // Help
         submenu: [
             {
                 label: 'Discord',
