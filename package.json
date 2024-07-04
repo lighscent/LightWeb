@@ -1,11 +1,16 @@
 {
   "name": "lightweb",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "description": "A custom private Web Browser",
-  "main": "src/main.js",
+  "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder"
+  },
+  "repository": "https://github.com/light2k4/LightWeb",
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
   },
   "author": "https://github.com/light2k4",
   "license": "MIT",
@@ -19,6 +24,7 @@
     "axios": "^1.7.2",
     "cross-fetch": "^4.0.0",
     "electron-devtools-installer": "^3.2.0",
+    "electron-updater": "^6.2.1",
     "path": "^0.12.7"
   },
   "build": {
