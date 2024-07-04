@@ -5,9 +5,6 @@ const fetch = require('cross-fetch');
 
 let windowApp;
 
-autoUpdater.autoDownload = true;
-autoUpdater.autoInstallOnAppQuit = true;
-
 async function clearCache() {
     const ses = windowApp.webContents.session;
     await ses.clearCache();
@@ -65,55 +62,34 @@ const RowMenu = [
     }
 ];
 
-// autoUpdater.on('update-available', (info) => {
-//     windowApp.showMessageBox({
-//         type: 'info',
-//         title: 'Update available',
-//         message: 'A new version of LightWeb is available. Do you want to download it?',
-//         buttons: ['Yes', 'No']
-//     }).then((buttonIndex) => {
-//         if (buttonIndex.response === 0) {
-//             autoUpdater.downloadUpdate();
-//         } else {
-//             windowApp.showMessageBox({
-//                 type: 'info',
-//                 title: 'Update available',
-//                 message: 'The update will not be downloaded. You can download it manually on the Github page.'
-//             });
-//         }
-//     });
-// })
+autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Update'],
+        title: 'Application Update',
+        message: process.platform === 'win32' ? releaseNotes : releaseName,
+        detail: 'A new version is being downloaded.'
+    };
+    dialog.showMessageBox(dialogOpts, (response) => {
 
-// // maybe dont show this
-// autoUpdater.on('update-not-available', (info) => {
-//     windowApp.showMessageBox({
-//         type: 'info',
-//         title: 'No update available',
-//         message: 'No new version of LightWeb is available.'
-//     });
-// });
+    })
+});
 
-// autoUpdater.on('update-downloaded', (info) => {
-//     windowApp.showMessageBox({
-//         type: 'info',
-//         title: 'Update downloaded',
-//         message: 'The update has been downloaded. Do you want to install it now?',
-//         buttons: ['Yes', 'No']
-//     }).then((buttonIndex) => {
-//         if (buttonIndex.response === 0) {
-//             autoUpdater.quitAndInstall();
-//         }
-//     });
-// });
 
-// autoUpdater.on('error', (error) => {
-//     console.error(error);
-//     windowApp.showMessageBox({
-//         type: 'error',
-//         title: 'Error',
-//         message: 'An error occurred while updating. Please try again.'
-//     });
-// });
+autoUpdater.on('update-downloaded', (_event, releaseNotes, releaseName) => {
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Restart', 'Later'],
+        title: 'Application Update',
+        message: process.platform === 'win32' ? releaseNotes : releaseName,
+        detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+    };
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+        if (returnValue.response === 0) autoUpdater.quitAndInstall();
+    });
+});
+
+
 
 app.whenReady().then(() => {
     const menu = Menu.buildFromTemplate(RowMenu);
@@ -121,7 +97,7 @@ app.whenReady().then(() => {
 
     createWindow();
 
-    autoUpdater.checkForUpdates();
+    autoUpdater.checkForUpdatesAndNotify();
 });
 
 

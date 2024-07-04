@@ -1,13 +1,18 @@
 {
   "name": "lightweb",
-  "version": "1.2.3",
+  "version": "1.2.4",
+  "private": false,
   "description": "A custom private Web Browser",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "build:publish": "electron-builder --publish always"
   },
-  "repository": "https://github.com/light2k4/LightWeb",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/light2k4/LightWeb"
+  },
   "publish": {
     "provider": "github",
     "releaseType": "release"
