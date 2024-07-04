@@ -1,6 +1,5 @@
 {
   "name": "lightweb",
-  "version": "1.0.2",
   "description": "A custom private Web Browser",
   "main": "src/main.js",
   "scripts": {
