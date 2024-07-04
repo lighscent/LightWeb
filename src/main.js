@@ -1,6 +1,8 @@
 const { app, BrowserWindow, Menu, shell } = require('electron');
+const axios = require('axios')
 
 let window;
+
 
 function createWindow() {
     win = new BrowserWindow({
@@ -14,9 +16,26 @@ function createWindow() {
     });
 
     win.loadURL('https://google.com')
+    checkVersion();
 }
 
 app.whenReady().then(createWindow)
+
+function checkVersion() {
+    const localVersion = require('../package.json').version
+    axios.get('https://raw.githubusercontent.com/light2k4/LightWeb/master/package.json')
+        .then(response => {
+            const remoteVersion = response.data.version;
+            if (localVersion !== remoteVersion) {
+                dialog.showMessageBox(win, {
+                    type: 'info',
+                    title: 'Mise à jour disponible',
+                    message: `Une nouvelle version est disponible : ${remoteVersion}. Veuillez mettre à jour votre application.`
+                });
+            }
+        })
+        .catch(error => console.error('Erreur lors de la vérification de la version:', error));
+}
 
 
 const RowMenu = [
