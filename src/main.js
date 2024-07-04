@@ -22,9 +22,9 @@ function createWindow() {
 app.whenReady().then(createWindow)
 
 function checkVersion() {
-    const localVersion = require('../version.json').version
+    const localVersion = require('./version.json').version
     console.log(localVersion)
-    axios.get('https://raw.githubusercontent.com/light2k4/LightWeb/master/version.json')
+    axios.get('https://raw.githubusercontent.com/light2k4/LightWeb/master/src/version.json')
         .then(response => {
             const remoteVersion = response.data.version;
             if (localVersion !== remoteVersion) {
