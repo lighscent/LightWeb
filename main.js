@@ -1,6 +1,5 @@
 const { app, BrowserWindow, Menu, shell, dialog, session } = require('electron');
 const { ElectronBlocker } = require('@cliqz/adblocker-electron');
-const { autoUpdater, AppUpdater } = require('electron-updater');
 const fetch = require('cross-fetch');
 
 let windowApp;
@@ -54,7 +53,7 @@ const RowMenu = [
         ]
     },
     {
-        label: '❓', // Help
+        label: '❓',
         submenu: [
             { label: 'Discord', click() { shell.openExternal('https://discord.gg/Acdp4B6KUv') } },
             { label: 'Github', click() { shell.openExternal('https://github.com/light2k4') } }
@@ -62,42 +61,37 @@ const RowMenu = [
     }
 ];
 
-autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-        type: 'info',
-        buttons: ['Update'],
-        title: 'Application Update',
-        message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: 'A new version is being downloaded.'
-    };
-    dialog.showMessageBox(dialogOpts, (response) => {
-
-    })
-});
-
-
-autoUpdater.on('update-downloaded', (_event, releaseNotes, releaseName) => {
-    const dialogOpts = {
-        type: 'info',
-        buttons: ['Restart', 'Later'],
-        title: 'Application Update',
-        message: process.platform === 'win32' ? releaseNotes : releaseName,
-        detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-    };
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-        if (returnValue.response === 0) autoUpdater.quitAndInstall();
-    });
-});
-
+async function getLatestVersion() {
+    const response = await fetch('https://api.github.com/repos/light2k4/LightWeb/releases');
+    const data = await response.json();
+    const latest = data[0];
+    const latestVersion = latest.tag_name;
+    const currentVersion = app.getVersion();
+    if (currentVersion >= latestVersion) return;
+    if (latest.prerelease) {
+        console.log("new dev version available");
+    } else {
+        dialog.showMessageBox(windowApp, {
+            type: 'info',
+            title: 'Info',
+            message: `La mise à jour ${latestVersion} est disponible en version stable.`,
+            buttons: ["Mettre à jour", "Plus tard"]
+        }).then((response) => {
+            if (response.response === 0) {
+                shell.openExternal('https://github.com/light2k4/LightWeb/releases/latest')
+            } else {
+                console.log("User cancelled update");
+            }
+        });
+    }
+}
 
 
 app.whenReady().then(() => {
     const menu = Menu.buildFromTemplate(RowMenu);
     Menu.setApplicationMenu(menu);
-
+    getLatestVersion();
     createWindow();
-
-    autoUpdater.checkForUpdatesAndNotify();
 });
 
 
