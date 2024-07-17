@@ -1,6 +1,6 @@
 {
   "name": "lightweb",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "private": false,
   "description": "A custom private Web Browser",
   "main": "main.js",
@@ -12,10 +12,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/light2k4/LightWeb"
-  },
-  "publish": {
-    "provider": "github",
-    "releaseType": "release"
   },
   "author": "https://github.com/light2k4",
   "license": "MIT",
